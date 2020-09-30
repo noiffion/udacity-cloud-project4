@@ -20,6 +20,15 @@ provider:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_USER_INDEX: TodosUserIndex
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 functions:
 
@@ -96,7 +105,7 @@ resources:
               - AttributeName: todoId
                 KeyType: HASH
               - AttributeName: userId
-                KeyType: HASH
+                KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
 
