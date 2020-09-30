@@ -1,7 +1,7 @@
 export interface TodoItem {
-  userId: string;
   todoId: string;
   createdAt: string;
+  userId: string;
   name: string;
   dueDate: string;
   done: boolean;
