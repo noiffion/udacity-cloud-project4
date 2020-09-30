@@ -111,3 +111,6 @@ set_env.sh
 #k8s environment live variables
 env-configmap_live.yaml
 env-secret_live.yaml
+
+# temp duplicate of src folder
+sourceRepo/src
