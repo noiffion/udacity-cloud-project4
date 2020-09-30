@@ -5,6 +5,9 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
 
+package:
+  individually: true
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -12,11 +15,16 @@ provider:
     minimumCompressionSize: 1024
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    TODOS_TABLE: Todos-${self:provider.stage}
+    TODOS_USER_INDEX: TodosUserIndex
+
 
 functions:
 
-  Auth:
-    handler: src/lambda/auth/auth0Authorizer.handler
+#  Auth:
+#    handler: src/lambda/auth/auth0Authorizer.handler
 
   # TODO: Configure this function
   GetTodos:
@@ -28,41 +36,40 @@ functions:
           cors: true
 
   # TODO: Configure this function
-  GetTodos:
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
-    events:
-      - http:
-          method: post
-          path: todos
-          cors: true
-
-  # TODO: Configure this function
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
-    events:
-      - http:
-          method: patch
-          path: todos/{todoId}
-          cors: true
-
-  # TODO: Configure this function
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
-    events:
-      - http:
-          method: delete
-          path: todos/{todoId}
-          cors: true
-
-  # TODO: Configure this function
-  GenerateUploadUrl:
-    handler: src/lambda/http/generateUploadUrl.handler
-    events:
-      - http:
-          method: post
-          path: todos/{todoId}/attachment
-          cors: true
+#  CreateTodo:
+#    handler: src/lambda/http/createTodo.handler
+#    events:
+#      - http:
+#          method: post
+#          path: todos
+#          cors: true
+#
+#  # TODO: Configure this function
+#  UpdateTodo:
+#    handler: src/lambda/http/updateTodo.handler
+#    events:
+#      - http:
+#          method: patch
+#          path: todos/{todoId}
+#          cors: true
+#
+#  # TODO: Configure this function
+#  DeleteTodo:
+#    handler: src/lambda/http/deleteTodo.handler
+#    events:
+#      - http:
+#          method: delete
+#          path: todos/{todoId}
+#          cors: true
+#
+#  # TODO: Configure this function
+#  GenerateUploadUrl:
+#    handler: src/lambda/http/generateUploadUrl.handler
+#    events:
+#      - http:
+#          method: post
+#          path: todos/{todoId}/attachment
+#          cors: true
 
 resources:
   Resources:
@@ -70,26 +77,26 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: partitionKey
+          - AttributeName: todoId  # partitionKey
             AttributeType: S
-          - AttributeName: sortKey
+          - AttributeName: createdAt  # sortKey
             AttributeType: S
-          - AttributeName: indexKey
+          - AttributeName: userId  # indexKey
             AttributeType: S
         KeySchema:
-          - AttributeName: partitionKey
+          - AttributeName: todoId
             KeyType: HASH
-          - AttributeName: sortKey
+          - AttributeName: createdAt
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
         LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.INDEX_NAME}
+          - IndexName: ${self:provider.environment.TODOS_USER_INDEX}
             KeySchema:
-              - AttributeName: partitionKey
+              - AttributeName: todoId
                 KeyType: HASH
-              - AttributeName: indexKey
-                KeyType: RANGE
+              - AttributeName: userId
+                KeyType: HASH
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
 
