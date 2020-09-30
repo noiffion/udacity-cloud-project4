@@ -1,7 +1,5 @@
 import 'source-map-support/register';
-
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
-
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest';
 
 export const handler: APIGatewayProxyHandler = async (
