@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { Method, AxiosResponse } from 'axios';
 import { apiEndpoint } from '../config';
-import { TodoItem, GetTodosResp, TodoCreate, CreateTodoResp, UpdateTodoResp, TodoDelete, DeleteTodoResp } from '../types/TodoItem.d';
+import { TodoItem, GetTodosResp, TodoCreate, CreateTodoResp, UpdateTodoResp, TodoDelete, DeleteTodoResp } from '../types/Todo.d';
 
 async function axRequest<ReqData, RespData>(idToken: string, path: string, method: Method, reqBody: ReqData): Promise<AxiosResponse<RespData>> {
   const url = `${apiEndpoint}/${path}`;

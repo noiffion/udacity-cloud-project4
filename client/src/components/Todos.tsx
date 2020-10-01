@@ -16,7 +16,7 @@ import {
 
 import { createTodo, deleteTodo, getTodos, updateTodo } from '../api/todos-api'
 import Auth from '../auth/Auth'
-import { TodoItem } from '../types/TodoItem.d'
+import { TodoItem } from '../types/Todo.d'
 
 interface TodosProps {
   auth: Auth
