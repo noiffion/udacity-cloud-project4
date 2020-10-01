@@ -54,27 +54,25 @@ functions:
             schema:
               application/json: ${file(src/models/create-todo-request.json)}
 
-  # TODO: Configure this function
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
     events:
       - http:
           method: put
-          path: todos/{todoId}
+          path: todos
           cors: true
           request:
             schema:
               application/json: ${file(src/models/update-todo-request.json)}
 
-#  # TODO: Configure this function
-#  DeleteTodo:
-#    handler: src/lambda/http/deleteTodo.handler
-#    events:
-#      - http:
-#          method: delete
-#          path: todos/{todoId}
-#          cors: true
-#
+  DeleteTodo:
+    handler: src/lambda/http/deleteTodo.handler
+    events:
+      - http:
+          method: delete
+          path: todos
+          cors: true
+
 #  # TODO: Configure this function
 #  GenerateUploadUrl:
 #    handler: src/lambda/http/generateUploadUrl.handler
