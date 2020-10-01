@@ -47,7 +47,8 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       const dueDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
-        dueDate
+        dueDate,
+        attachmentUrl: ''
       })
       this.setState({
         todos: [...this.state.todos, newTodo],
