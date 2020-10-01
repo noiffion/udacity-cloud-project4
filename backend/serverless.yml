@@ -43,7 +43,6 @@ functions:
           path: todos
           cors: true
 
-  # TODO: Configure this function
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -55,15 +54,18 @@ functions:
             schema:
               application/json: ${file(src/models/create-todo-request.json)}
 
-#  # TODO: Configure this function
-#  UpdateTodo:
-#    handler: src/lambda/http/updateTodo.handler
-#    events:
-#      - http:
-#          method: patch
-#          path: todos/{todoId}
-#          cors: true
-#
+  # TODO: Configure this function
+  UpdateTodo:
+    handler: src/lambda/http/updateTodo.handler
+    events:
+      - http:
+          method: put
+          path: todos/{todoId}
+          cors: true
+          request:
+            schema:
+              application/json: ${file(src/models/update-todo-request.json)}
+
 #  # TODO: Configure this function
 #  DeleteTodo:
 #    handler: src/lambda/http/deleteTodo.handler
