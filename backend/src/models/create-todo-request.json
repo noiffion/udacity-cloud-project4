@@ -3,9 +3,6 @@
   "title": "todos",
   "type": "object",
   "properties": {
-    "userId": {
-      "type": "string"
-    },
     "name": {
       "type": "string"
     },
