@@ -16,7 +16,7 @@ export const handler: APIGatewayProxyHandler = async (
       TableName: todosTable,
       KeyConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: {
-        ':userId': userId
+        ':userId': userId,
       }
     })
     .promise();
