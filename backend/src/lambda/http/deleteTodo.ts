@@ -8,11 +8,6 @@ const todosTable = process.env.TODOS_TABLE;
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-
-  const authorization = event.headers.Authorization;
-  const split = authorization.split(' ');
-  const jwtToken = split[1];
-
   const { todoId, createdAt } = JSON.parse(event.body);
 
   await docClient
@@ -28,7 +23,10 @@ export const handler: APIGatewayProxyHandler = async (
   const deletedTodoId = todoId;
   return {
     statusCode: 200,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
     body: JSON.stringify({ deletedTodoId })
   };
 };

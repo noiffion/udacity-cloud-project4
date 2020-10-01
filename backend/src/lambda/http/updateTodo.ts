@@ -11,10 +11,6 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const updatedTodo: TodoItem = JSON.parse(event.body);
 
-  const authorization = event.headers.Authorization;
-  const split = authorization.split(' ');
-  const jwtToken = split[1];
-
   await docClient
     .put({
       TableName: todosTable,
@@ -24,7 +20,10 @@ export const handler: APIGatewayProxyHandler = async (
 
   return {
     statusCode: 200,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
     body: JSON.stringify({ updatedTodo })
   };
 };
