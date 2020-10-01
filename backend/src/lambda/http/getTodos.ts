@@ -7,7 +7,7 @@ const todosTable = process.env.TODOS_TABLE;
 
 export const handler: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
   const result = await docClient
-    .scan({
+    .query({
       TableName: todosTable
     })
     .promise();
