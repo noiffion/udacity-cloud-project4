@@ -1,7 +1,53 @@
 import Axios from 'axios';
+import { Method, AxiosResponse } from 'axios';
 import { apiEndpoint } from '../config';
-import { TodoItem, TodoCreate, TodoUpdate } from '../types/TodoItem.d';
+import { TodoItem, GetTodosResp, TodoCreate, CreateTodoResp, TodoUpdate, UpdateTodoResp, DeleteTodoResp } from '../types/TodoItem.d';
 
+async function axRequest<ReqData, RespData>(idToken: string, path: string, method: Method, reqBody: ReqData): Promise<AxiosResponse<RespData>> {
+  const url = `${apiEndpoint}/${path}`;
+  const data = reqBody ? JSON.stringify(reqBody) : reqBody;
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${idToken}`
+  }
+  return Axios({ method, url, headers, data });
+}
+
+export async function getTodos(idToken: string): Promise<TodoItem[]> {
+  const response: AxiosResponse<GetTodosResp> = await axRequest<null, GetTodosResp>(idToken, 'todos', 'GET', null);
+  return response.data.todoList;
+}
+
+export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<TodoItem> {
+  const response: AxiosResponse<CreateTodoResp> = await axRequest<TodoCreate, CreateTodoResp>(idToken, 'todos', 'POST', newTodo);
+  return response.data.newTodo;
+}
+
+export async function updateTodo(idToken: string, todoId: string, updatedTodo: TodoUpdate): Promise<TodoItem> {
+  const response: AxiosResponse<UpdateTodoResp> = await axRequest<TodoUpdate, UpdateTodoResp>(idToken, `todos/${todoId}`, 'PUT', updatedTodo);
+  return response.data.updatedTodo;
+}
+
+export async function deleteTodo(idToken: string, todoId: string): Promise<string> {
+  const response: AxiosResponse<DeleteTodoResp> = await axRequest<null, DeleteTodoResp>(idToken, `todos/${todoId}`, 'DELETE', null);
+  return response.data.deletedTodoId;
+}
+
+export async function getUploadUrl(idToken: string, todoId: string): Promise<string> {
+  const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
+    headers: {
+
+    }
+  });
+  return response.data.uploadUrl;
+}
+
+export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
+  await Axios.put(uploadUrl, file);
+}
+
+
+/*
 export async function getTodos(idToken: string): Promise<TodoItem[]> {
   console.log('Fetching todos');
 
@@ -50,8 +96,7 @@ export async function deleteTodo(idToken: string, todoId: string): Promise<void>
 export async function getUploadUrl(idToken: string, todoId: string): Promise<string> {
   const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${idToken}`
+
     }
   });
   return response.data.uploadUrl;
@@ -60,3 +105,5 @@ export async function getUploadUrl(idToken: string, todoId: string): Promise<str
 export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
   await Axios.put(uploadUrl, file);
 }
+
+*/

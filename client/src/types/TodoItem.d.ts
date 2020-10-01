@@ -8,6 +8,22 @@ export interface TodoItem {
   attachmentUrl?: string;
 }
 
+export interface GetTodosResp {
+  todoList: TodoItem[];
+}
+
+export interface CreateTodoResp {
+  newTodo: TodoItem;
+}
+
+export interface UpdateTodoResp {
+  updatedTodo: TodoItem;
+}
+
+export interface DeleteTodoResp {
+  deletedTodoId: string;
+}
+
 // Fields in a request to create a single TODO item.
 export interface TodoCreate {
   name: string;
