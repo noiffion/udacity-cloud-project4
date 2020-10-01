@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { Method, AxiosResponse } from 'axios';
 import { apiEndpoint } from '../config';
-import { TodoItem, GetTodosResp, TodoCreate, CreateTodoResp, TodoUpdate, UpdateTodoResp, DeleteTodoResp } from '../types/TodoItem.d';
+import { TodoItem, GetTodosResp, TodoCreate, CreateTodoResp, UpdateTodoResp, DeleteTodoResp } from '../types/TodoItem.d';
 
 async function axRequest<ReqData, RespData>(idToken: string, path: string, method: Method, reqBody: ReqData): Promise<AxiosResponse<RespData>> {
   const url = `${apiEndpoint}/${path}`;
@@ -23,8 +23,8 @@ export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<
   return response.data.newTodo;
 }
 
-export async function updateTodo(idToken: string, todoId: string, updatedTodo: TodoUpdate): Promise<TodoItem> {
-  const response: AxiosResponse<UpdateTodoResp> = await axRequest<TodoUpdate, UpdateTodoResp>(idToken, `todos/${todoId}`, 'PUT', updatedTodo);
+export async function updateTodo(idToken: string, todoId: string, updatedTodo: TodoItem): Promise<TodoItem> {
+  const response: AxiosResponse<UpdateTodoResp> = await axRequest<TodoItem, UpdateTodoResp>(idToken, `todos/${todoId}`, 'PUT', updatedTodo);
   return response.data.updatedTodo;
 }
 

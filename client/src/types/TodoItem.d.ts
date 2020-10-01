@@ -29,10 +29,3 @@ export interface TodoCreate {
   name: string;
   dueDate: string;
 }
-
-// Fields in a request to update a single TODO item.
-export interface TodoUpdate {
-  name: string;
-  dueDate: string;
-  done: boolean;
-}

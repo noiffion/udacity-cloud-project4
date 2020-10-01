@@ -22,13 +22,11 @@ interface TodosProps {
   auth: Auth
   history: History
 }
-
 interface TodosState {
   todos: TodoItem[]
   newTodoName: string
   loadingTodos: boolean
 }
-
 export class Todos extends React.PureComponent<TodosProps, TodosState> {
   state: TodosState = {
     todos: [],
@@ -75,9 +73,13 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     try {
       const todo = this.state.todos[pos]
       await updateTodo(this.props.auth.getIdToken(), todo.todoId, {
+        todoId: todo.todoId,
+        createdAt: todo.createdAt,
+        userId: todo.userId,
         name: todo.name,
         dueDate: todo.dueDate,
-        done: !todo.done
+        done: !todo.done,
+        attachmentUrl: todo.attachmentUrl
       })
       this.setState({
         todos: update(this.state.todos, {
