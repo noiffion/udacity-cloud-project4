@@ -190,7 +190,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(todo.todoId)}
+                  onClick={() => this.onTodoDelete(todo.todoId, todo.createdAt)}
                 >
                   <Icon name="delete" />
                 </Button>
