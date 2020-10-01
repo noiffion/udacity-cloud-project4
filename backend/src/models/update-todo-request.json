@@ -9,13 +9,13 @@
     "createdAt": {
       "type": "string"
     },
+    "userId": {
+      "type": "string"
+    },
     "name": {
       "type": "string"
     },
     "dueDate": {
-      "type": "string"
-    },
-    "userId": {
       "type": "string"
     },
     "done": {
