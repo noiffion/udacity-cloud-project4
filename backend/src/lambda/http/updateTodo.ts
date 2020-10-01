@@ -14,7 +14,6 @@ export const handler: APIGatewayProxyHandler = async (
   const authorization = event.headers.Authorization;
   const split = authorization.split(' ');
   const jwtToken = split[1];
-  console.log(jwtToken);
 
   await docClient
     .put({

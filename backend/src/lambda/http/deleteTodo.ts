@@ -12,7 +12,6 @@ export const handler: APIGatewayProxyHandler = async (
   const authorization = event.headers.Authorization;
   const split = authorization.split(' ');
   const jwtToken = split[1];
-  console.log(jwtToken);
 
   const { todoId, createdAt } = JSON.parse(event.body);
 
