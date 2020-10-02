@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "todos",
+  "type": "object",
+  "properties": {
+    "todoId": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    }
+  },
+  "required": ["todoId", "createdAt"],
+  "additionalProperties": false
+}
