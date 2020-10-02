@@ -22,19 +22,29 @@ export const handler: APIGatewayProxyHandler = async (
     ...newTodoData
   };
 
-  await docClient
-    .put({
-      TableName: todosTable,
-      Item: newTodo
-    })
-    .promise();
-
-  return {
-    statusCode: 201,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify({ newTodo })
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true
   };
+
+  try {
+    await docClient
+      .put({
+        TableName: todosTable,
+        Item: newTodo
+      })
+      .promise();
+
+    return {
+      statusCode: 201,
+      headers,
+      body: JSON.stringify({ newTodo })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error })
+    };
+  }
 };

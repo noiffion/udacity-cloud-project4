@@ -11,19 +11,29 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const updatedTodo: TodoItem = JSON.parse(event.body);
 
-  await docClient
-    .put({
-      TableName: todosTable,
-      Item: updatedTodo
-    })
-    .promise();
-
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify({ updatedTodo })
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true
   };
+
+  try {
+    await docClient
+      .put({
+        TableName: todosTable,
+        Item: updatedTodo
+      })
+      .promise();
+
+    return {
+      statusCode: 201,
+      headers,
+      body: JSON.stringify({ updatedTodo })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error })
+    };
+  }
 };

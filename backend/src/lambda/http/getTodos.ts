@@ -11,23 +11,33 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const userId = getUserId(event);
 
-  const result = await docClient
-    .query({
-      TableName: todosTable,
-      KeyConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: {
-        ':userId': userId,
-      }
-    })
-    .promise();
-  const todoList = result.Items;
-
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify({ todoList })
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true
   };
+
+  try {
+    const result = await docClient
+      .query({
+        TableName: todosTable,
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: {
+          ':userId': userId,
+        }
+      })
+      .promise();
+    const todoList = result.Items;
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ todoList })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error })
+    };
+  }
 };
