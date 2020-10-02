@@ -22,8 +22,8 @@ provider:
 
 functions:
 
-#  Auth:
-#    handler: src/lambda/auth/auth0Authorizer.handler
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
@@ -32,6 +32,7 @@ functions:
           method: get
           path: todos
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -45,6 +46,7 @@ functions:
           method: post
           path: todos
           cors: true
+          authorizer: Auth
           request:
             schema:
               application/json: ${file(src/models/create-todo-request.json)}
@@ -61,6 +63,7 @@ functions:
           method: put
           path: todos
           cors: true
+          authorizer: Auth
           request:
             schema:
               application/json: ${file(src/models/update-todo-request.json)}
@@ -77,6 +80,7 @@ functions:
           method: delete
           path: todos
           cors: true
+          authorizer: Auth
           request:
             schema:
               application/json: ${file(src/models/delete-todo-request.json)}
@@ -97,6 +101,18 @@ functions:
 
 resources:
   Resources:
+
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
