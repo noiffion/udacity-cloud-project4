@@ -3,9 +3,6 @@
   "title": "update-todo",
   "type": "object",
   "properties": {
-    "userId": {
-      "type": "string"
-    },
     "createdAt": {
       "type": "string"
     },
@@ -25,6 +22,6 @@
       "type": "string"
     }
   },
-  "required": ["todoId", "createdAt", "name", "dueDate", "userId", "done", "attachmentUrl" ],
+  "required": ["createdAt", "todoId", "name", "dueDate", "done", "attachmentUrl" ],
   "additionalProperties": false
 }

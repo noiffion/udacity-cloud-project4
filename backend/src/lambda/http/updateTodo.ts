@@ -1,6 +1,7 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
+import getUserId from '../auth/utils';
 import { TodoItem } from '../../models/Todo.d';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
@@ -10,6 +11,7 @@ export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   const updatedTodo: TodoItem = JSON.parse(event.body);
+  updatedTodo.userId = getUserId(event);
 
   const headers = {
     'Access-Control-Allow-Origin': '*',

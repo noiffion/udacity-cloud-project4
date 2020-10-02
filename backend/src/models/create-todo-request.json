@@ -3,9 +3,6 @@
   "title": "create-todo",
   "type": "object",
   "properties": {
-    "userId": {
-      "type": "string"
-    },
     "name": {
       "type": "string"
     },
@@ -16,6 +13,6 @@
       "type": "string"
     }
   },
-  "required": ["userId", "name", "dueDate", "attachmentUrl"],
+  "required": ["name", "dueDate", "attachmentUrl"],
   "additionalProperties": false
 }
