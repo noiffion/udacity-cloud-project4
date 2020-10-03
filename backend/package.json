@@ -12,6 +12,7 @@
     "axios": "^0.20.0",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.10.1",
     "middy": "^0.36.0",
     "source-map-support": "^0.5.19",
     "uuid": "^8.3.0",
