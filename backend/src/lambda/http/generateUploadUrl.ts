@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import * as AWS  from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda';
 import { TodoItem } from '../../models/Todo.d';
 
@@ -28,7 +28,7 @@ export const handler: APIGatewayProxyHandler = async (
       Key: todoId,
       Expires: urlExpiration
     });
-    todo.attachmentUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
+    todo.attachmentUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`;
 
     await docClient
       .put({

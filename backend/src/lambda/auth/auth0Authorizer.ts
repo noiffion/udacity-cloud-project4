@@ -7,7 +7,9 @@ import { JwtPayload } from './jwt.d';
 
 const logger = createLogger('auth');
 
-export const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<APIGatewayAuthorizerResult> => {
+export const handler = async (
+  event: APIGatewayTokenAuthorizerEvent
+): Promise<APIGatewayAuthorizerResult> => {
   logger.info('Authorizing an user', event.authorizationToken);
   try {
     const jwtToken = await verifyToken(event.authorizationToken);
@@ -62,7 +64,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   // Auth0: Advanced Settings: Endpoints: JSON Web Key Set
   const client = JwksRsa({ jwksUri: 'https://dev-jyq4bnwu.eu.auth0.com/.well-known/jwks.json' });
   const kid = '1rxWtoXZ3Hsmtolie3mcI';
-  const certSigningKey = await client.getSigningKeyAsync(kid) as CertSigningKey;
+  const certSigningKey = (await client.getSigningKeyAsync(kid)) as CertSigningKey;
 
   return verify(token, certSigningKey.publicKey, { algorithms: ['RS256'] }) as JwtPayload;
 }

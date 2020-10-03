@@ -29,8 +29,8 @@ export const handler: APIGatewayProxyHandler = async (
         ExpressionAttributeValues: {
           ':n': updateTodo.name,
           ':due': updateTodo.dueDate,
-          ':dn': updateTodo.done,
-        },
+          ':dn': updateTodo.done
+        }
       })
       .promise();
 
