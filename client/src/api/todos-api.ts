@@ -86,7 +86,7 @@ export async function getUploadUrl(
 ): Promise<string> {
   const response: AxiosResponse<UploadUrl> = await axRequest<null, UploadUrl>(
     idToken,
-    `todos/${todoId}/attachemnt`,
+    `todos/${todoId}/attachment`,
     'POST',
     null
   );

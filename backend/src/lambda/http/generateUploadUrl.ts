@@ -39,7 +39,7 @@ export const handler: APIGatewayProxyHandler = async (
      .promise();
 
     return {
-      statusCode: 200,
+      statusCode: 201,
       headers,
       body: JSON.stringify({ uploadUrl: signedUrl })
     };
