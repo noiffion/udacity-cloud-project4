@@ -90,14 +90,13 @@ functions:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
-#  # TODO: Configure this function
-#  GenerateUploadUrl:
-#    handler: src/lambda/http/generateUploadUrl.handler
-#    events:
-#      - http:
-#          method: post
-#          path: todos/{todoId}/attachment
-#          cors: true
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          method: post
+          path: todos/{todoId}/attachment
+          cors: true
 
 resources:
   Resources:
@@ -117,11 +116,11 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: userId  # partitionKey
+          - AttributeName: userId
             AttributeType: S
-          - AttributeName: createdAt  # sortKey
+          - AttributeName: createdAt
             AttributeType: S
-          - AttributeName: todoId  # indexKey
+          - AttributeName: todoId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
@@ -138,6 +137,4 @@ resources:
               - AttributeName: todoId
                 KeyType: RANGE
             Projection:
-              ProjectionType: ALL # What attributes will be copied to an index
-
-    # TODO: Add any necessary AWS resources
+              ProjectionType: ALL
