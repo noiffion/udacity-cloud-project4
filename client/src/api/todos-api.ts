@@ -6,10 +6,8 @@ import {
   GetTodosResp,
   GetTodoResp,
   TodoCreate,
+  TodoUpdate,
   CreateTodoResp,
-  UpdateTodoResp,
-  TodoDelete,
-  DeleteTodoResp,
   UploadUrl
 } from '../types/Todo.d';
 
@@ -45,7 +43,7 @@ export async function getTodo(idToken: string, todoId: string): Promise<TodoItem
     'GET',
     null
   );
-  return response.data.todo;
+  return response.data.todoItem[0];
 }
 
 export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<TodoItem> {
@@ -58,28 +56,24 @@ export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<
   return response.data.newTodo;
 }
 
-export async function updateTodo(idToken: string, updatedTodo: TodoItem): Promise<TodoItem> {
-  const response: AxiosResponse<UpdateTodoResp> = await axRequest<TodoItem, UpdateTodoResp>(
+export async function updateTodo(idToken: string, todoId: string, updatedTodo: TodoUpdate): Promise<undefined> {
+  const response: AxiosResponse<undefined> = await axRequest<TodoUpdate, undefined>(
     idToken,
-    `todos/${updatedTodo.todoId}`,
+    `todos/${todoId}`,
     'PUT',
     updatedTodo
   );
-  return response.data.updatedTodo;
+  return response.data;
 }
 
-export async function deleteTodo(
-  idToken: string,
-  todoId: string,
-  createdAt: string
-): Promise<string> {
-  const response: AxiosResponse<DeleteTodoResp> = await axRequest<TodoDelete, DeleteTodoResp>(
+export async function deleteTodo(idToken: string, todoId: string): Promise<undefined> {
+  const response: AxiosResponse<undefined> = await axRequest<null, undefined>(
     idToken,
     `todos/${todoId}`,
     'DELETE',
-    { todoId, createdAt }
+    null
   );
-  return response.data.deletedTodoId;
+  return response.data;
 }
 
 export async function getUploadUrl(idToken: string, todoId: string, todoItem: TodoItem): Promise<string> {

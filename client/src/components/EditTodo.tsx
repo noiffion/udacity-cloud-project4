@@ -46,8 +46,8 @@ export class EditTodo extends React.PureComponent<EditTodoProps, EditTodoState> 
     try {
       const todo = await getTodo(idToken, todoId);
       this.setState({ todo });
-    } catch (e) {
-      alert(`Failed to fetch todo (${todoId}):  ${e.message}`);
+    } catch (error) {
+      console.error(`Failed to fetch todo (${todoId}):  ${error.message}`);
     }
   }
 
@@ -80,8 +80,8 @@ export class EditTodo extends React.PureComponent<EditTodoProps, EditTodoState> 
       await uploadFile(uploadUrl, this.state.file);
 
       alert('File was uploaded!');
-    } catch (e) {
-      alert('Could not upload a file: ' + e.message);
+    } catch (error) {
+      alert('Could not upload a file: ' + error.message);
     } finally {
       this.setUploadState(UploadState.NoUpload);
     }
