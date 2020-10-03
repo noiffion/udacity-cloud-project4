@@ -36,3 +36,7 @@ export interface TodoDelete {
   todoId: string;
   createdAt: string;
 }
+
+export interface UploadUrl {
+  uploadUrl: string;
+}
