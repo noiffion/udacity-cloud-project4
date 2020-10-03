@@ -1,17 +1,15 @@
 import 'source-map-support/register';
 import { APIGatewayTokenAuthorizerEvent, APIGatewayAuthorizerResult } from 'aws-lambda';
 import { verify } from 'jsonwebtoken';
+import JwksRsa, { CertSigningKey } from 'jwks-rsa';
 import { createLogger } from '../../utils/logger';
 import { JwtPayload } from './jwt.d';
 
 const logger = createLogger('auth');
 
-// Auth0 certificate to verify JWT token signature
-// Auth0: Advanced Settings: Endpoints: JSON Web Key Set
-const jwksUrl = 'https://dev-jyq4bnwu.eu.auth0.com/.well-known/jwks.json';
-
 export const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<APIGatewayAuthorizerResult> => {
-  logger.info('Authorizing a user', event.authorizationToken);
+  logger.info('Authorizing an user', event.authorizationToken);
+    console.log(event.authorizationToken)
   try {
     const jwtToken = await verifyToken(event.authorizationToken);
     logger.info('User was authorized', jwtToken);
@@ -60,5 +58,12 @@ function getToken(authHeader: string): string {
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader);
-  return verify(token, jwksUrl, { algorithms: ['RS256'] }) as JwtPayload;
+
+  // Auth0 certificate to verify JWT token signature
+  // Auth0: Advanced Settings: Endpoints: JSON Web Key Set
+  const client = JwksRsa({ jwksUri: 'https://dev-jyq4bnwu.eu.auth0.com/.well-known/jwks.json' });
+  const kid = '1rxWtoXZ3Hsmtolie3mcI';
+  const certSigningKey = await client.getSigningKeyAsync(kid) as CertSigningKey;
+
+  return verify(token, certSigningKey.publicKey, { algorithms: ['RS256'] }) as JwtPayload;
 }
