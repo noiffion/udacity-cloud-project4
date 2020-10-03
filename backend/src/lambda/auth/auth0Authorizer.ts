@@ -9,7 +9,6 @@ const logger = createLogger('auth');
 
 export const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<APIGatewayAuthorizerResult> => {
   logger.info('Authorizing an user', event.authorizationToken);
-    console.log(event.authorizationToken)
   try {
     const jwtToken = await verifyToken(event.authorizationToken);
     logger.info('User was authorized', jwtToken);

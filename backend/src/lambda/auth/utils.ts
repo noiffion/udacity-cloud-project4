@@ -12,6 +12,5 @@ export default function getUserId(event: APIGatewayProxyEvent): string  {
   const split = authorization.split(' ');
   const jwtToken = split[1];
   const decodedJwt = decode(jwtToken) as JwtPayload;
-  console.debug(authorization, split, jwtToken, decodedJwt);
   return decodedJwt.sub as string;
 }
