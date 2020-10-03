@@ -34,6 +34,18 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     loadingTodos: true
   };
 
+  async componentDidMount() {
+    try {
+      const todos = await getTodos(this.props.auth.getIdToken());
+      this.setState({
+        todos,
+        loadingTodos: false
+      });
+    } catch (e) {
+      alert(`Failed to fetch todos: ${e.message}`);
+    }
+  }
+
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ newTodoName: event.target.value });
   };
@@ -91,18 +103,6 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       alert('Todo deletion failed');
     }
   };
-
-  async componentDidMount() {
-    try {
-      const todos = await getTodos(this.props.auth.getIdToken());
-      this.setState({
-        todos,
-        loadingTodos: false
-      });
-    } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`);
-    }
-  }
 
   render() {
     return (

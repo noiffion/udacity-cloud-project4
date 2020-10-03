@@ -4,6 +4,7 @@ import { apiEndpoint } from '../config';
 import {
   TodoItem,
   GetTodosResp,
+  GetTodoResp,
   TodoCreate,
   CreateTodoResp,
   UpdateTodoResp,
@@ -37,6 +38,16 @@ export async function getTodos(idToken: string): Promise<TodoItem[]> {
   return response.data.todoList;
 }
 
+export async function getTodo(idToken: string, todoId: string): Promise<TodoItem> {
+  const response: AxiosResponse<GetTodoResp> = await axRequest<null, GetTodoResp>(
+    idToken,
+    `todos/${todoId}`,
+    'GET',
+    null
+  );
+  return response.data.todo;
+}
+
 export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<TodoItem> {
   const response: AxiosResponse<CreateTodoResp> = await axRequest<TodoCreate, CreateTodoResp>(
     idToken,
@@ -50,7 +61,7 @@ export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<
 export async function updateTodo(idToken: string, updatedTodo: TodoItem): Promise<TodoItem> {
   const response: AxiosResponse<UpdateTodoResp> = await axRequest<TodoItem, UpdateTodoResp>(
     idToken,
-    'todos',
+    `todos/${updatedTodo.todoId}`,
     'PUT',
     updatedTodo
   );
@@ -64,7 +75,7 @@ export async function deleteTodo(
 ): Promise<string> {
   const response: AxiosResponse<DeleteTodoResp> = await axRequest<TodoDelete, DeleteTodoResp>(
     idToken,
-    'todos',
+    `todos/${todoId}`,
     'DELETE',
     { todoId, createdAt }
   );

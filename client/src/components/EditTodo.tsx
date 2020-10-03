@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import Auth from '../auth/Auth';
-import { getUploadUrl, uploadFile } from '../api/todos-api';
+import { getUploadUrl, uploadFile, getTodo } from '../api/todos-api';
+import { TodoItem } from '../types/Todo.d';
 
 enum UploadState {
   NoUpload,
@@ -19,15 +20,36 @@ interface EditTodoProps {
 }
 
 interface EditTodoState {
+  todo: TodoItem;
   file: any;
   uploadState: UploadState;
 }
 
 export class EditTodo extends React.PureComponent<EditTodoProps, EditTodoState> {
   state: EditTodoState = {
+    todo: {
+      userId: '',
+      createdAt: '',
+      todoId: '',
+      name: '',
+      dueDate: '',
+      done: false,
+      attachmentUrl: ''
+    },
     file: undefined,
     uploadState: UploadState.NoUpload
   };
+
+  async componentDidMount() {
+    const idToken = this.props.auth.getIdToken();
+    const todoId = this.props.match.params.todoId;
+    try {
+      const todo = await getTodo(idToken, todoId);
+      this.setState({ todo });
+    } catch (e) {
+      alert(`Failed to fetch todo (${todoId}):  ${e.message}`);
+    }
+  }
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -50,7 +72,8 @@ export class EditTodo extends React.PureComponent<EditTodoProps, EditTodoState> 
       this.setUploadState(UploadState.FetchingPresignedUrl);
       const uploadUrl = await getUploadUrl(
         this.props.auth.getIdToken(),
-        this.props.match.params.todoId
+        this.props.match.params.todoId,
+        this.state.todo
       );
 
       this.setUploadState(UploadState.UploadingFile);

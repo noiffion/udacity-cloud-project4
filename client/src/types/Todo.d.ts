@@ -12,6 +12,10 @@ export interface GetTodosResp {
   todoList: TodoItem[];
 }
 
+export interface GetTodoResp {
+  todo: TodoItem;
+}
+
 export interface CreateTodoResp {
   newTodo: TodoItem;
 }
