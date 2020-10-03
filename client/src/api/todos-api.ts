@@ -56,7 +56,11 @@ export async function createTodo(idToken: string, newTodo: TodoCreate): Promise<
   return response.data.newTodo;
 }
 
-export async function updateTodo(idToken: string, todoId: string, updatedTodo: TodoUpdate): Promise<undefined> {
+export async function updateTodo(
+  idToken: string,
+  todoId: string,
+  updatedTodo: TodoUpdate
+): Promise<undefined> {
   const response: AxiosResponse<undefined> = await axRequest<TodoUpdate, undefined>(
     idToken,
     `todos/${todoId}`,
@@ -76,12 +80,17 @@ export async function deleteTodo(idToken: string, todoId: string): Promise<undef
   return response.data;
 }
 
-export async function getUploadUrl(idToken: string, todoId: string, todoItem: TodoItem): Promise<string> {
+export async function getUploadUrl(
+  idToken: string,
+  todoId: string,
+  todoItem: TodoItem
+): Promise<string> {
   const response: AxiosResponse<UploadUrl> = await axRequest<TodoItem, UploadUrl>(
     idToken,
     `todos/${todoId}/attachemnt`,
     'POST',
-    todoItem)
+    todoItem
+  );
   return response.data.uploadUrl;
 }
 

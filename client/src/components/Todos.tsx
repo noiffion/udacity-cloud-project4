@@ -73,7 +73,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   onTodoDelete = async (todoId: string, createdAt: string) => {
     try {
-      await deleteTodo(this.props.auth.getIdToken(), todoId, createdAt);
+      await deleteTodo(this.props.auth.getIdToken(), todoId);
       this.setState({
         todos: this.state.todos.filter((todo) => todo.todoId != todoId)
       });
@@ -88,7 +88,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       await updateTodo(this.props.auth.getIdToken(), todo.todoId, {
         name: todo.name,
         dueDate: todo.dueDate,
-        done: !todo.done,
+        done: !todo.done
       });
       this.setState({
         todos: update(this.state.todos, {
