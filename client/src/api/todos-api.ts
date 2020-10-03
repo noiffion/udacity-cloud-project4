@@ -82,14 +82,13 @@ export async function deleteTodo(idToken: string, todoId: string): Promise<undef
 
 export async function getUploadUrl(
   idToken: string,
-  todoId: string,
-  todoItem: TodoItem
+  todoId: string
 ): Promise<string> {
-  const response: AxiosResponse<UploadUrl> = await axRequest<TodoItem, UploadUrl>(
+  const response: AxiosResponse<UploadUrl> = await axRequest<null, UploadUrl>(
     idToken,
     `todos/${todoId}/attachemnt`,
     'POST',
-    todoItem
+    null
   );
   return response.data.uploadUrl;
 }
