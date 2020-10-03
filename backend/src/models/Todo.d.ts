@@ -15,8 +15,9 @@ export interface TodoCreate {
   attachmentUrl: string;
 }
 
-// Fields in a request to delete a single TODO item.
-export interface TodoDelete {
-  todoId: string;
-  createdAt: string;
+// Fields in a request to update a single TODO item.
+export interface TodoUpdate {
+  name: string;
+  dueDate: string;
+  done: string;
 }

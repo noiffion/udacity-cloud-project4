@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   const userId = getUserId(event);
-  const { createdAt, todoId } = JSON.parse(event.body);
+  const todoId = event.pathParameters.todoId;
 
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -21,17 +21,14 @@ export const handler: APIGatewayProxyHandler = async (
     await docClient
       .delete({
         TableName: todosTable,
-        Key: {
-          userId,
-          createdAt
-        }
+        Key: { userId, todoId }
       })
       .promise();
 
     return {
-      statusCode: 201,
+      statusCode: 204,
       headers,
-      body: JSON.stringify({ deleted: todoId })
+      body: undefined
     };
   } catch (error) {
     return {

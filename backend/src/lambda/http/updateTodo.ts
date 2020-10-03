@@ -2,7 +2,7 @@ import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import getUserId from '../auth/utils';
-import { TodoItem } from '../../models/Todo.d';
+import { TodoUpdate } from '../../models/Todo.d';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const todosTable = process.env.TODOS_TABLE;
@@ -10,8 +10,9 @@ const todosTable = process.env.TODOS_TABLE;
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  const updatedTodo: TodoItem = JSON.parse(event.body);
-  updatedTodo.userId = getUserId(event);
+  const updateTodo: TodoUpdate = JSON.parse(event.body);
+  const userId = getUserId(event);
+  const todoId = event.pathParameters.todoId;
 
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -20,16 +21,23 @@ export const handler: APIGatewayProxyHandler = async (
 
   try {
     await docClient
-      .put({
+      .update({
         TableName: todosTable,
-        Item: updatedTodo
+        Key: { userId, todoId },
+        UpdateExpression: 'set #n = :n, dueDate = :due, done = :dn',
+        ExpressionAttributeNames: { '#n': 'name' },
+        ExpressionAttributeValues: {
+          ':n': updateTodo.name,
+          ':due': updateTodo.dueDate,
+          ':dn': updateTodo.done,
+        },
       })
       .promise();
 
     return {
-      statusCode: 201,
+      statusCode: 204,
       headers,
-      body: JSON.stringify({ updatedTodo })
+      body: undefined
     };
   } catch (error) {
     return {
