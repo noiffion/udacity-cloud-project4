@@ -1,7 +1,6 @@
 import 'source-map-support/register';
 import * as AWS  from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda';
-import getUserId from '../auth/utils';
 import { TodoItem } from '../../models/Todo.d';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
@@ -13,13 +12,10 @@ export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId;
+  const todo: TodoItem = JSON.parse(event.body);
   const s3 = new AWS.S3({
     signatureVersion: 'v4'
   });
-
-  const todo: TodoItem = JSON.parse(event.body);
-  todo.userId = getUserId(event);
-  todo.attachmentUrl = undefined;
 
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -27,6 +23,13 @@ export const handler: APIGatewayProxyHandler = async (
   };
 
   try {
+    const signedUrl = s3.getSignedUrl('putObject', {
+      Bucket: bucketName,
+      Key: todoId,
+      Expires: urlExpiration
+    });
+    todo.attachmentUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`
+
     await docClient
       .put({
         TableName: todosTable,
@@ -34,11 +37,10 @@ export const handler: APIGatewayProxyHandler = async (
       })
       .promise();
 
-    // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
     return {
       statusCode: 201,
       headers,
-      body: JSON.stringify({ todo })
+      body: JSON.stringify({ uploadUrl: signedUrl })
     };
   } catch (error) {
     return {
