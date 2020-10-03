@@ -13,19 +13,11 @@ export interface GetTodosResp {
 }
 
 export interface GetTodoResp {
-  todo: TodoItem;
+  todoItem: TodoItem[];
 }
 
 export interface CreateTodoResp {
   newTodo: TodoItem;
-}
-
-export interface UpdateTodoResp {
-  updatedTodo: TodoItem;
-}
-
-export interface DeleteTodoResp {
-  deletedTodoId: string;
 }
 
 // Fields in a request to create a single TODO item.
@@ -35,10 +27,11 @@ export interface TodoCreate {
   attachmentUrl: string;
 }
 
-// Fields in a request to delete a single TODO item.
-export interface TodoDelete {
-  todoId: string;
-  createdAt: string;
+// Fields in a request to update a single TODO item.
+export interface TodoUpdate {
+  name: string;
+  dueDate: string;
+  done: boolean;
 }
 
 export interface UploadUrl {

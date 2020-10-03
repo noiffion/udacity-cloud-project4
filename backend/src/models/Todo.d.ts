@@ -19,5 +19,5 @@ export interface TodoCreate {
 export interface TodoUpdate {
   name: string;
   dueDate: string;
-  done: string;
+  done: boolean;
 }
