@@ -3,9 +3,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import * as AWS from 'aws-sdk';
 import getUserId from '../auth/utils';
 import { TodoUpdate } from '../../models/Todo.d';
+import { createLogger } from '../../utils/logger';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const todosTable = process.env.TODOS_TABLE;
+const logger = createLogger('getTodo');
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
@@ -35,12 +37,14 @@ export const handler: APIGatewayProxyHandler = async (
       })
       .promise();
 
+    logger.info('Successfully updated the todo item', todoId);
     return {
       statusCode: 204,
       headers,
       body: undefined
     };
   } catch (error) {
+    logger.error('Error: ', error.message);
     return {
       statusCode: 500,
       headers,

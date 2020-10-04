@@ -2,9 +2,11 @@ import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import getUserId from '../auth/utils';
+import { createLogger } from '../../utils/logger';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const todosTable = process.env.TODOS_TABLE;
+const logger = createLogger('deleteTodo');
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
@@ -25,12 +27,14 @@ export const handler: APIGatewayProxyHandler = async (
       })
       .promise();
 
+    logger.info('Successfully deleted todo item', todoId);
     return {
       statusCode: 204,
       headers,
       body: undefined
     };
   } catch (error) {
+    logger.error('Error: ', error.message);
     return {
       statusCode: 500,
       headers,

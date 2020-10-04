@@ -3,8 +3,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import * as AWS from 'aws-sdk';
 import * as uuid from 'uuid';
 import getUserId from '../auth/utils';
+import { createLogger } from '../../utils/logger';
 import { TodoCreate, TodoItem } from '../../models/Todo.d';
 
+const logger = createLogger('createTodo');
 const docClient = new AWS.DynamoDB.DocumentClient();
 const todosTable = process.env.TODOS_TABLE;
 
@@ -34,6 +36,7 @@ export const handler: APIGatewayProxyHandler = async (
         Item: newTodo
       })
       .promise();
+    logger.info('Successfully created a new todo item.')
 
     return {
       statusCode: 201,
@@ -41,6 +44,7 @@ export const handler: APIGatewayProxyHandler = async (
       body: JSON.stringify({ newTodo })
     };
   } catch (error) {
+    logger.error('Error: ', error.message)
     return {
       statusCode: 500,
       headers,

@@ -28,8 +28,8 @@ export const handler = async (
         ]
       }
     };
-  } catch (e) {
-    logger.error('User not authorized', { error: e.message });
+  } catch (error) {
+    logger.error('User not authorized', { error: error.message });
 
     return {
       principalId: 'user',
