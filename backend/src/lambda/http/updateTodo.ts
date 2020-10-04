@@ -1,11 +1,13 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
+import * as AWSXRay from 'aws-xray-sdk';
 import getUserId from '../auth/utils';
 import { TodoUpdate } from '../../models/Todo.d';
 import { createLogger } from '../../utils/logger';
 
-const docClient = new AWS.DynamoDB.DocumentClient();
+const XAWS = AWSXRay.captureAWS(AWS);
+const docClient = new XAWS.DynamoDB.DocumentClient();
 const todosTable = process.env.TODOS_TABLE;
 const logger = createLogger('getTodo');
 
