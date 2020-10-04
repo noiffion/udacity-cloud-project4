@@ -29,12 +29,13 @@ export const handler: APIGatewayProxyHandler = async (
 
     await docClient
       .update({
-       TableName: todosTable,
-       Key: { userId, todoId },
-       UpdateExpression: 'set attachmentUrl = :attachmentUrl',
-       ExpressionAttributeValues: {
-         ':attachmentUrl': `https://${bucketName}.s3.amazonaws.com/${todoId}`
-       }
+        TableName: todosTable,
+        Key: { userId, todoId },
+        ConditionExpression: 'attribute_exists(todoId)',
+        UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+        ExpressionAttributeValues: {
+          ':attachmentUrl': `https://${bucketName}.s3.amazonaws.com/${todoId}`
+        }
      })
      .promise();
 
