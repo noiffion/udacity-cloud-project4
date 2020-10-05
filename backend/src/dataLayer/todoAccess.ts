@@ -28,7 +28,7 @@ export class TodoAccess {
   }
 
   async getTodo(userId: string, todoId: string): Promise<TodoItem> {
-    logger.info('Getting one todo item: ', todoId);
+    logger.info(`Getting todo item: ${todoId}`);
     const result = await this.docClient
       .query({
         TableName: this.todosTable,
@@ -44,7 +44,7 @@ export class TodoAccess {
   }
 
   async createTodo(newTodo: TodoItem): Promise<TodoItem> {
-    logger.info('Creating a new todo item: ', newTodo.todoId);
+    logger.info(`Creating new todo item: ${newTodo.todoId}`);
     await this.docClient
       .put({
         TableName: this.todosTable,
@@ -55,7 +55,7 @@ export class TodoAccess {
   }
 
   async updateTodo(userId: string, todoId: string, updateData: TodoUpdate): Promise<void> {
-    logger.info('Updating a todo item: ', todoId);
+    logger.info(`Updating a todo item: ${todoId}`);
     await this.docClient
       .update({
         TableName: this.todosTable,

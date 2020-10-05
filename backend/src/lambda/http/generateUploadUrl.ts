@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (
       body: JSON.stringify({ uploadUrl: signedUrl })
     };
   } catch (error) {
-    logger.error('Error: ', error.message);
+    logger.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
       headers,

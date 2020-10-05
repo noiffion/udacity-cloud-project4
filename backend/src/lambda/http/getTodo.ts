@@ -20,14 +20,14 @@ export const handler: APIGatewayProxyHandler = async (
 
   try {
     const todoItem: TodoItem = await getTodo(jwtToken, todoId);
-    logger.info('Successfully retrieved a todo item', todoId);
+    logger.info(`Successfully retrieved todo item: ${todoId}`);
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ todoItem })
     };
   } catch (error) {
-    logger.error('Error: ', error.message);
+    logger.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
       headers,

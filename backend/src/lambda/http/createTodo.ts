@@ -27,7 +27,7 @@ export const handler: APIGatewayProxyHandler = async (
       body: JSON.stringify({ newTodo })
     };
   } catch (error) {
-    logger.error('Error: ', error.message);
+    logger.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
       headers,

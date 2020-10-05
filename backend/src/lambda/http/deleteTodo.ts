@@ -19,14 +19,14 @@ export const handler: APIGatewayProxyHandler = async (
 
   try {
     await deleteTodo(jwtToken, todoId);
-    logger.info('Successfully deleted todo item', todoId);
+    logger.info(`Successfully deleted todo item: ${todoId}`);
     return {
       statusCode: 204,
       headers,
       body: undefined
     };
   } catch (error) {
-    logger.error('Error: ', error.message);
+    logger.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
       headers,
