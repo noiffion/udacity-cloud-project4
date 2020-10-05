@@ -1,14 +1,13 @@
-import * as uuid from 'uuid'
+import * as uuid from 'uuid';
+import { TodoAccess } from '../dataLayer/todoAccess';
+import { getUserId } from '../utils/getJwt';
+import { TodoItem } from '../models/Todo.d';
 
-import { Group } from '../models/Group'
-import { GroupAccess } from '../dataLayer/groupsAccess'
-import { CreateGroupRequest } from '../requests/CreateGroupRequest'
-import { getUserId } from '../auth/utils'
+const groupAccess = new TodoAccess()
 
-const groupAccess = new GroupAccess()
-
-export async function getAllGroups(): Promise<Group[]> {
-  return groupAccess.getAllGroups()
+export async function getTodos(jwtToken: string): Promise<TodoItem[]> {
+  const userId: string = getUserId(jwtToken);
+  return groupAccess.getTodos(userId);
 }
 
 export async function createGroup(

@@ -1,37 +1,25 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda';
-import * as AWS from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
-import getUserId from '../auth/utils';
+import { getTodos } from '../../businessLogic/todos';
 import { createLogger } from '../../utils/logger';
+import { getToken } from '../../utils/getJwt';
+import { TodoItem } from '../../models/Todo.d';
 
-const XAWS = AWSXRay.captureAWS(AWS);
-const docClient = new XAWS.DynamoDB.DocumentClient();
-const todosTable = process.env.TODOS_TABLE;
 const logger = createLogger('getTodos');
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  const userId = getUserId(event);
 
+  logger.info('Processing GetTodos event...');
+  const jwtToken: string = getToken(event);
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true
   };
 
   try {
-    const result = await docClient
-      .query({
-        TableName: todosTable,
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: {
-          ':userId': userId
-        }
-      })
-      .promise();
-    const todoList = result.Items;
-
+    const todoList: TodoItem[] = await getTodos(jwtToken);
     logger.info('Successfully retrieved todolist');
     return {
       statusCode: 200,
