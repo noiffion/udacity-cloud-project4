@@ -14,9 +14,9 @@ The application allows creating/removing/updating/fetching TODO items. Each TODO
 
 The following lambda functions have been implemented (and set up in serverless.yml):
 - Auth: Lambda authorizer (formerly custom authorizer)
-- GetTodos: retrieve all todos for
-- GetTodo: retrieve one todo (by id)
-- CreateTodo: create a new todo item
+- GetTodos: retrieves all todos for
+- GetTodo: retrieves one todo (by id)
+- CreateTodo: creates a new todo item
 - UpdateTodo: updates a todo item
 - DeleteTodo: removes a todo item
 - GenerateUploadUrl: returns a signed url for uploading an image file to AWS S3
@@ -90,7 +90,11 @@ This should start a development server with the React application that will inte
 X-Ray tracing has been set up
 
 <div align="center">
-  <img src="./screenshots/XRay.png" alt="X-Ray of the app" style="zoom:40%;" />
+  <img src="./screenshots/XRay_1.png" alt="1. X-Ray of the app" style="zoom:40%;" />
+</div>
+
+<div align="center">
+  <img src="./screenshots/XRay_2.png" alt="2. X-Ray of the app" style="zoom:40%;" />
 </div>
 
 ## Logging
