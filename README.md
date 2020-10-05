@@ -87,7 +87,7 @@ This should start a development server with the React application that will inte
 # Monitoring
 ## Distributed tracing
 
-X-Ray tracing is set up
+X-Ray tracing has been set up
 
 <div align="center">
   <img src="./screenshots/XRay.png" alt="X-Ray of the app" style="zoom:40%;" />
