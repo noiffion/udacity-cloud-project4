@@ -1,4 +1,5 @@
 import * as uuid from 'uuid';
+import * as AWS from 'aws-sdk';
 import { TodoAccess } from '../dataLayer/todoAccess';
 import { getUserId } from '../utils/getJwt';
 import { TodoItem, TodoCreate, TodoUpdate } from '../models/Todo.d';
@@ -36,4 +37,18 @@ export async function updateTodo(
 export async function deleteTodo(jwtToken: string, todoId: string): Promise<void> {
   const userId = getUserId(jwtToken);
   return todoAccess.deleteTodo(userId, todoId);
+}
+
+export async function generateUploadUrl(jwtToken: string, todoId: string): Promise<string> {
+  const userId = getUserId(jwtToken);
+  const bucketName = process.env.IMAGES_S3_BUCKET;
+  const urlExpiration = parseInt(process.env.SIGNED_URL_EXPIRATION, 10);
+  const s3 = new AWS.S3({ signatureVersion: 'v4' });
+  const signedUrl = s3.getSignedUrl('putObject', {
+    Bucket: bucketName,
+    Key: todoId,
+    Expires: urlExpiration
+  });
+  todoAccess.saveImgUrl(userId, todoId);
+  return signedUrl;
 }
