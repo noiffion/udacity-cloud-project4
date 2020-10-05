@@ -3,7 +3,7 @@ import { TodoAccess } from '../dataLayer/todoAccess';
 import { getUserId } from '../utils/getJwt';
 import { TodoItem, TodoCreate, TodoUpdate } from '../models/Todo.d';
 
-const todoAccess = new TodoAccess()
+const todoAccess = new TodoAccess();
 
 export async function getTodos(jwtToken: string): Promise<TodoItem[]> {
   const userId: string = getUserId(jwtToken);
@@ -24,7 +24,11 @@ export async function createTodo(jwtToken: string, newTodoData: TodoCreate): Pro
   return todoAccess.createTodo(newTodo);
 }
 
-export async function updateTodo(jwtToken: string, todoId: string, updateData: TodoUpdate): Promise<void> {
+export async function updateTodo(
+  jwtToken: string,
+  todoId: string,
+  updateData: TodoUpdate
+): Promise<void> {
   const userId = getUserId(jwtToken);
   return todoAccess.updateTodo(userId, todoId, updateData);
 }

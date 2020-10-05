@@ -10,7 +10,6 @@ const logger = createLogger('getTodos');
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-
   logger.info('Processing GetTodos event...');
   const jwtToken: string = getToken(event);
   const headers = {

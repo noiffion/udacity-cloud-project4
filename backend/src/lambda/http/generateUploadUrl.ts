@@ -40,8 +40,8 @@ export const handler: APIGatewayProxyHandler = async (
         ExpressionAttributeValues: {
           ':attachmentUrl': `https://${bucketName}.s3.amazonaws.com/${todoId}`
         }
-     })
-     .promise();
+      })
+      .promise();
 
     logger.info('Successfully created signed url.');
     return {

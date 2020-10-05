@@ -9,7 +9,6 @@ const logger = createLogger('deleteTodo');
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-
   logger.info('Processing DeleteTodo event...');
   const jwtToken: string = getToken(event);
   const todoId = event.pathParameters.todoId;

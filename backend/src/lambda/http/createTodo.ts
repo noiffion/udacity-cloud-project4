@@ -10,7 +10,6 @@ const logger = createLogger('createTodo');
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-
   logger.info('Processing CreateTodo event...');
   const jwtToken: string = getToken(event);
   const newTodoData: TodoCreate = JSON.parse(event.body);
@@ -21,14 +20,14 @@ export const handler: APIGatewayProxyHandler = async (
 
   try {
     const newTodo: TodoItem = await createTodo(jwtToken, newTodoData);
-    logger.info('Successfully created a new todo item.')
+    logger.info('Successfully created a new todo item.');
     return {
       statusCode: 201,
       headers,
       body: JSON.stringify({ newTodo })
     };
   } catch (error) {
-    logger.error('Error: ', error.message)
+    logger.error('Error: ', error.message);
     return {
       statusCode: 500,
       headers,
