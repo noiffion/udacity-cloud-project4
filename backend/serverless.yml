@@ -4,7 +4,7 @@ service:
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
-
+  - serverless-plugin-tracing
 package:
   individually: true
 
@@ -15,9 +15,7 @@ provider:
     minimumCompressionSize: 1024
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
-  tracing:
-    lambda: true
-    apiGateway: true
+  tracing: true
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     TODOS_TABLE: Todos-${self:provider.stage}
@@ -43,6 +41,12 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   GetTodo:
     handler: src/lambda/http/getTodo.handler
@@ -57,6 +61,12 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -74,6 +84,12 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
@@ -91,6 +107,12 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
@@ -105,6 +127,12 @@ functions:
         Action:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
@@ -124,6 +152,12 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
 resources:
   Resources:
