@@ -2,7 +2,7 @@ import * as AWS  from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
 import { createLogger } from '../utils/logger';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { TodoItem } from '../models/Todo.d';
+import { TodoItem, TodoUpdate } from '../models/Todo.d';
 
 const XAWS = AWSXRay.captureAWS(AWS);
 const logger = createLogger('todoAccess');
@@ -54,5 +54,23 @@ export class TodoAccess {
       })
       .promise();
     return newTodo;
+  }
+
+  async updateTodo(userId: string, todoId: string, updateData: TodoUpdate): Promise<void> {
+    logger.info('Updating a todo item: ', todoId);
+    await this.docClient
+      .update({
+        TableName: this.todosTable,
+        Key: { userId, todoId },
+        ConditionExpression: 'attribute_exists(todoId)',
+        UpdateExpression: 'set #n = :n, dueDate = :due, done = :dn',
+        ExpressionAttributeNames: { '#n': 'name' },
+        ExpressionAttributeValues: {
+          ':n': updateData.name,
+          ':due': updateData.dueDate,
+          ':dn': updateData.done
+        }
+      })
+      .promise();
   }
 }

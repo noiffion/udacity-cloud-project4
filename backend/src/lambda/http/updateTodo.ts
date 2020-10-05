@@ -1,44 +1,27 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
-import * as AWS from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
-import getUserId from '../auth/utils';
+import { updateTodo } from '../../businessLogic/todos';
 import { TodoUpdate } from '../../models/Todo.d';
 import { createLogger } from '../../utils/logger';
+import { getToken } from '../../utils/getJwt';
 
-const XAWS = AWSXRay.captureAWS(AWS);
-const docClient = new XAWS.DynamoDB.DocumentClient();
-const todosTable = process.env.TODOS_TABLE;
-const logger = createLogger('getTodo');
+const logger = createLogger('updateTodo');
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  const updateTodo: TodoUpdate = JSON.parse(event.body);
-  const userId = getUserId(event);
-  const todoId = event.pathParameters.todoId;
 
+  logger.info('Processing UpdateTodo event...');
+  const jwtToken: string = getToken(event);
+  const todoId = event.pathParameters.todoId;
+  const updateData: TodoUpdate = JSON.parse(event.body);
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true
   };
 
   try {
-    await docClient
-      .update({
-        TableName: todosTable,
-        Key: { userId, todoId },
-        ConditionExpression: 'attribute_exists(todoId)',
-        UpdateExpression: 'set #n = :n, dueDate = :due, done = :dn',
-        ExpressionAttributeNames: { '#n': 'name' },
-        ExpressionAttributeValues: {
-          ':n': updateTodo.name,
-          ':due': updateTodo.dueDate,
-          ':dn': updateTodo.done
-        }
-      })
-      .promise();
-
+    await updateTodo(jwtToken, todoId, updateData);
     logger.info('Successfully updated the todo item', todoId);
     return {
       statusCode: 204,
