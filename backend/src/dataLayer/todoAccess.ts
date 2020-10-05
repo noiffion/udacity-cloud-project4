@@ -83,15 +83,15 @@ export class TodoAccess {
 
   async saveImgUrl(userId: string, todoId: string): Promise<void> {
     await this.docClient
-    .update({
-      TableName: this.todosTable,
-      Key: { userId, todoId },
-      ConditionExpression: 'attribute_exists(todoId)',
-      UpdateExpression: 'set attachmentUrl = :attachmentUrl',
-      ExpressionAttributeValues: {
-        ':attachmentUrl': `https://${bucketName}.s3.amazonaws.com/${todoId}`
-      }
-    })
-    .promise();
+      .update({
+        TableName: this.todosTable,
+        Key: { userId, todoId },
+        ConditionExpression: 'attribute_exists(todoId)',
+        UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+        ExpressionAttributeValues: {
+          ':attachmentUrl': `https://${bucketName}.s3.amazonaws.com/${todoId}`
+        }
+      })
+      .promise();
   }
 }
