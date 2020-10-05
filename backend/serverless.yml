@@ -78,7 +78,7 @@ functions:
           authorizer: Auth
           request:
             schema:
-              application/json: ${file(src/models/create-todo-request.json)}
+              application/json: ${file(src/requests/create-todo-request.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -101,7 +101,7 @@ functions:
           authorizer: Auth
           request:
             schema:
-              application/json: ${file(src/models/update-todo-request.json)}
+              application/json: ${file(src/requests/update-todo-request.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
