@@ -28,3 +28,8 @@ export async function updateTodo(jwtToken: string, todoId: string, updateData: T
   const userId = getUserId(jwtToken);
   return todoAccess.updateTodo(userId, todoId, updateData);
 }
+
+export async function deleteTodo(jwtToken: string, todoId: string): Promise<void> {
+  const userId = getUserId(jwtToken);
+  return todoAccess.deleteTodo(userId, todoId);
+}
