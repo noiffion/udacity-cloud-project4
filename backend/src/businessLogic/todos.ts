@@ -49,6 +49,6 @@ export async function generateUploadUrl(jwtToken: string, todoId: string): Promi
     Key: todoId,
     Expires: urlExpiration
   });
-  todoAccess.saveImgUrl(userId, todoId);
+  todoAccess.saveImgUrl(userId, todoId, bucketName);
   return signedUrl;
 }

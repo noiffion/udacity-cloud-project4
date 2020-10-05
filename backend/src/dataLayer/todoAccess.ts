@@ -81,7 +81,7 @@ export class TodoAccess {
       .promise();
   }
 
-  async saveImgUrl(userId: string, todoId: string): Promise<void> {
+  async saveImgUrl(userId: string, todoId: string, bucketName: string): Promise<void> {
     await this.docClient
       .update({
         TableName: this.todosTable,
